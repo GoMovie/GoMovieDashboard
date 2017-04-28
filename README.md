@@ -1,3 +1,3 @@
-#GoMovie Project Dashboard
+# GoMovie Project Dashboard
 
-团队成员：**PZY** KYR ZMY HHK LJK CY CMH 
+团队成员：**PZY** KYR ZMY HHK LJK CY CMH
