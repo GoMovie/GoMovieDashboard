@@ -243,3 +243,134 @@ public interface CinemaRepository extends JpaRepository<Cinema, Long> {
   List<Cinema> findByCityId(String cityId);
 }
 ```
+
+
+### 2.2 模块划分（后端目录结构）
+
+
+```
+  ├─logs                                     # tomcat access log
+  ├─src
+  │  ├─main
+  │  │  ├─java
+  │  │  │  └─com
+  │  │  │      └─c09
+  │  │  │          └─GoMovie
+  │  │  │              ├─config              # 配置类
+  │  │  │              ├─movie
+  │  │  │              │  ├─controller       # 控制器
+  │  │  │              │  ├─entities         # 实体层
+  │  │  │              │  │  └─repositories  # DAO 层
+  │  │  │              │  └─service          # 服务层
+  │  │  │              ├─helper
+  │  │  │              └─user
+  │  │  │                  ├─controller      # 控制器
+  │  │  │                  ├─entities        # 实体层
+  │  │  │                  │  └─repositories # DAO 层
+  │  │  │                  └─service         # 服务层
+  │  │  └─resources                          # 资源定义文件
+  │  │      └─config
+  │  └─test                                  # 单元测试类
+  │      └─java
+  │          └─com
+  │              └─c09
+  │                  └─GoMovie
+  ├─pom.xml                                  # 包依赖
+  |
+  |...
+```
+### 2.3 架构设计
+整个后端采用spring mvc 框架，其各层关系表示如下：
+![mvc][1]
+#### 2.3.1 控制器
+
+Controller层负责具体的业务模块流程的控制，在此层里面要调用Serice层的接口来控制业务流程，控制的配置也同样是在Spring的配置文件里面进行，针对具体的业务流程，会有不同的控制器，我们具体的设计过程中可以将流程进行抽象归纳，设计出可以重复利用的子单元流程模块，这样不仅使程序结构变得清晰，也大大减少了代码量。
+
+```Java
+com.c09.GoMovie.***/
+  CinemaController.java       # 提供影院信息接口
+  MovieController.java        # 提供电影信息接口
+  OrderController.java        # 提供订单信息接口
+  ProductController.java      # 提供票务信息接口
+  UserController.java         # 提供用户服务接口，包括注册登录等
+  SessionController.java      # 提供回话接口
+```
+
+
+#### 2.3.2实体层
+
+Entity层是数据库在项目中的类实体对象，使用 Hibernate 跟数据库的物理数据模型建立对应关系
+
+```
+com.c09.GoMovie.***.entities/
+  Cinema.java
+  CinemaComment.java
+  Hall.java
+  Seat.java
+  Movie.java
+  MovieComment.java
+  Order.java
+  Screening.java
+  Ticket.java
+  User.java
+```
+
+#### 2.3.3 DAO 层
+
+DAO层主要是做数据持久层的工作，负责与数据库进行联络的一些任务都封装在此，DAO层的设计首先是设计DAO的接口，然后在Spring的配置文件中定义此接口的实现类，然后就可在模块中调用此接口来进行数据业务的处理，而不用关心此接口的具体实现类是哪个类，显得结构非常清晰，DAO层的数据源配置，以及有关数据库连接的参数都在Spring的配置文件中进行配置。
+
+```
+com.c09.GoMovie.***.repositories/
+  CinemaRepositoriy.java
+  CinemaCommentRepository.java
+  HallRepository.java
+  SeatRepository.java
+  MovieRepository.java
+  MovieCommentRepository.java
+  OrderRepository.java
+  ScreeningRepository.java
+  TicketRepository.java
+  UserRepository.java
+```
+
+
+#### 2.3.4 服务层
+
+Service层主要负责业务模块的逻辑应用设计。同样是首先设计接口，再设计其实现的类，接着再Spring的配置文件中配置其实现的关联。这样我们就可以在应用中调用Service接口来进行业务处理。Service层的业务实现，具体要调用到已定义的DAO层的接口，封装Service层的业务逻辑有利于通用的业务逻辑的独立性和重复利用性，程序显得非常简洁。
+```
+com.c09.GoMovie.***.services/
+  CinemaService.java
+  MovieService.java
+  OrderService.java
+  ProductService.java
+  UserService.java
+  SessionService.java
+```
+
+
+  
+### 2.4 软件设计技术
+####Object-Oriented Programming
+
+我们项目后端采用的主要语言是java，所以这个项目主要是面向对象编程，而很少用结构化编程。但是，因为我们的项目各个模块被清晰明确划分，所以能够充分利用面向对象编程的优势。，
+代码位置：/src/main/java/com/09/GoMovie
+
+
+#### 2.4.1 MVC Pattern
+
+在我们的项目中，mvc（model-view-controller）是我们最重要的设计模式。每个部分都有相应的代码实现。模型层
+主要包括实体和服务类。视图层主要由前端实现，包括node.js。控制器层及其关联的控制器类被放置在控制器文件夹中。
+
+代码位置: /src/main/java/com/09/GoMovie/***/services
+/src/main/java/com/09/GoMovie/***/entit ies
+/src/main/java/com/09/GoMovie/***/controller
+
+
+#### 2.4.2 Data Access Object Pattern
+
+
+数据访问对象必须实现特定的持久性策略（例如，JDBC或基于Hibernate的持久性逻辑），从而提取DAO层。 DAO界面：定义具体的操作方法。 DAO类：完成数据访问到真实主题的业务逻辑处理，最终用户想要获取数据信息。
+
+代码位置: /src/main/java/com/09/GoMovie/***/repository
+
+  [1]: http://ojtxs7ajx.bkt.clouddn.com/SSH-ENTITY_DAO_SERVICE_CONTROLLER.png
