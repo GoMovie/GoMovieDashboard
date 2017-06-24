@@ -102,4 +102,79 @@
 
 ---
 
-### 
+## 五、程序文件一览表
+
+### 5.1前端目录结构
+
+```bash
+.
+├── build/                      # 配置webpack
+│   └── ...
+├── config/                     # 存放项目配置文件
+│   ├── index.js                
+│   └── ...
+├── src/
+│   ├── main.js                 # 应用入口
+│   ├── url-config.js           # 存储了后端的地址
+│   ├── App.vue                 # 应用根组件
+│   ├── lib/                    # 一些通用的自定义函数库
+│   ├── components/             # 页面中的可复用小部件
+│   │   └── ...
+│   ├── pages/                  # 主页面
+│   │   └── ...
+│   ├── store/                  # 引入vuex存储，作为全局状态树
+│   │   ├── index.js
+│   │   └── ...
+│   └── assets/                 # 由webpack打包的静态资源
+│       └── ...
+├── static/                     # 不经过webpack打包的静态资源
+├── test/
+│   ├── e2e/                    # 配置端到端测试
+│   └── unit/                   # 配置单元测试
+├── .babelrc                    # babel设置
+├── .postcssrc.js               # postcss设置
+├── .eslintrc.js                # eslint设置
+├── .editorconfig               # editor设置
+├── .travis.yml                 # travis CI设置， 提供持续集成
+├── index.html                  # 入口html
+└── package.json                # 构建脚本以及依赖
+```
+
+
+
+### 5.2后端目录结构
+
+```bash
+​```
+  ├─logs                                     # tomcat access log
+  ├─src
+  │  ├─main
+  │  │  ├─java
+  │  │  │  └─com
+  │  │  │      └─c09
+  │  │  │          └─GoMovie
+  │  │  │              ├─config              # 配置类
+  │  │  │              ├─movie
+  │  │  │              │  ├─controller       # 控制器
+  │  │  │              │  ├─entities         # 实体层
+  │  │  │              │  │  └─repositories  # DAO 层
+  │  │  │              │  └─service          # 服务层
+  │  │  │              ├─helper
+  │  │  │              └─user
+  │  │  │                  ├─controller      # 控制器
+  │  │  │                  ├─entities        # 实体层
+  │  │  │                  │  └─repositories # DAO 层
+  │  │  │                  └─service         # 服务层
+  │  │  └─resources                          # 资源定义文件
+  │  │      └─config
+  │  └─test                                  # 单元测试类
+  │      └─java
+  │          └─com
+  │              └─c09
+  │                  └─GoMovie
+  ├─pom.xml                                  # 包依赖
+  |
+  |...
+​```
+```
+
