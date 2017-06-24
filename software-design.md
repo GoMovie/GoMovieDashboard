@@ -281,7 +281,9 @@ public interface CinemaRepository extends JpaRepository<Cinema, Long> {
 ```
 ### 2.3 架构设计
 整个后端采用spring mvc 框架，其各层关系表示如下：
+
 ![mvc][1]
+
 #### 2.3.1 控制器
 
 Controller层负责具体的业务模块流程的控制，在此层里面要调用Serice层的接口来控制业务流程，控制的配置也同样是在Spring的配置文件里面进行，针对具体的业务流程，会有不同的控制器，我们具体的设计过程中可以将流程进行抽象归纳，设计出可以重复利用的子单元流程模块，这样不仅使程序结构变得清晰，也大大减少了代码量。
@@ -350,23 +352,24 @@ com.c09.GoMovie.***.services/
 
   
 ### 2.4 软件设计技术
-####Object-Oriented Programming
+#### 2.4.1 Object-Oriented Programming
 
-我们项目后端采用的主要语言是java，所以这个项目主要是面向对象编程，而很少用结构化编程。但是，因为我们的项目各个模块被清晰明确划分，所以能够充分利用面向对象编程的优势。，
+我们项目后端采用的主要语言是java，所以这个项目主要是面向对象编程，而很少用结构化编程。但是，因为我们的项目各个模块被清晰明确划分，所以能够充分利用面向对象编程的优势。
+
 代码位置：/src/main/java/com/09/GoMovie
 
 
-#### 2.4.1 MVC Pattern
+#### 2.4.2 MVC Pattern
 
 在我们的项目中，mvc（model-view-controller）是我们最重要的设计模式。每个部分都有相应的代码实现。模型层
 主要包括实体和服务类。视图层主要由前端实现，包括node.js。控制器层及其关联的控制器类被放置在控制器文件夹中。
 
 代码位置: /src/main/java/com/09/GoMovie/***/services
-/src/main/java/com/09/GoMovie/***/entit ies
-/src/main/java/com/09/GoMovie/***/controller
+        /src/main/java/com/09/GoMovie/***/entit ies
+        /src/main/java/com/09/GoMovie/***/controller
 
 
-#### 2.4.2 Data Access Object Pattern
+#### 2.4.3 Data Access Object Pattern
 
 
 数据访问对象必须实现特定的持久性策略（例如，JDBC或基于Hibernate的持久性逻辑），从而提取DAO层。 DAO界面：定义具体的操作方法。 DAO类：完成数据访问到真实主题的业务逻辑处理，最终用户想要获取数据信息。
