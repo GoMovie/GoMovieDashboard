@@ -152,3 +152,225 @@ export default [{
 
 ## 2. Server
 
+### 2.1 技术选型
+- Maven
+  - Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的软件项目管理工具
+- redis
+  - Redis有着更为复杂的数据结构并且提供对他们的原子性操作，这是一个不同于其他数据库的进化路径。Redis的数据类型都是基于基本数据结构的同时对程序员透明，无需进行额外的抽象
+  - Redis运行在内存中但是可以持久化到磁盘,提供list，set，zset，hash等数据结构的存储
+- DAO
+  - DAO(Data Access Object)是一个数据访问接口,使用数据访问对象（DAO）设计模式把底层的数据访问逻辑和高层的商务逻辑分开.实现DAO模式能够更加专注于编写数据访问代码
+- Spring Boot
+  - Spring Boot使用“约定优先配置”（convention over configuration）的思想来摆脱Spring框架中各类繁复纷杂的配置，它可以快速、敏捷地开发新一代基于Spring框架的应用程序，集成了大量常用的第三方库配置，只需要非常少量的配置代码，开发者能够更加专注于业务逻辑。基于此，我们选用spring boot框架来快速、敏捷地开发后端。
+  - 首先需要在`pom.xml`中引入spring boot的开发依赖：
+```java
+<parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.3.5.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    ...
+```
+  编写类处理HTTP请求方法及main函数即可启动Tomcat容器，在`Application.jaca`的`SpiringApplication.run()`方法执行后，在内嵌的Tomcat容器中启动spring的应用上下文：
+```java
+package com.c09.GoMovie;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+
+//@EnableAdminServer
+@EnableCaching
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+编写类处理HTTP请求方法及main函数即可启动Tomcat容器，在`Application.jaca`的`SpiringApplication.run()`方法执行后，在内嵌的Tomcat容器中启动spring的应用上下文：
+```java
+package com.c09.GoMovie;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+
+//@EnableAdminServer
+@EnableCaching
+@SpringBootApplication
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+如果要更改默认配置，在`application.yml`文件中修改即可
+
+- Spring MVC
+  - spring mvc框架处理web请求的基本流程如下图所示，请求通过Tomcat Filter，经过Dispatcher Servlet分发调度后，按照顺序经过一系列的Handler Interceptors并且执行其中的预处理方法，提交给controller，经Business Service Facade处理后原路返回并进行一些后处理。
+  ![springmvc](./sd-img/springmvc.png)
+
+
+- Spring Data JPA
+  - Spring Boot它具有自动配置Spring Data以访问数据库的能力。只需将spring-boot-starter-data-jpa包含进来，Boot的自动配置引擎就能探测到程需要数据访问功能，并且会在Spring应用上下文中创建必要的Bean，以供开发者使用Repository和服务
+  - 对于每个实体，以cinema为例，在`cinema.java`中，用`@GeneratedValue(strategy=GenerationType.AUTO)` ——JPA注唯一标识符id，这样就将这个cinema对象转化为了关系型数据库中的记录：
+```java
+@Entity
+public class Cinema {
+  
+  @Id
+  @GeneratedValue(strategy=GenerationType.AUTO)
+  private long id;
+  ...
+```
+在`userRepository.java`中就能够自动创建数据访问对象的实现：
+```
+package com.c09.GoMovie.cinema.entities.repositories;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import com.c09.GoMovie.cinema.entities.Cinema;
+import com.c09.GoMovie.cinema.entities.CinemaComment;
+
+public interface CinemaRepository extends JpaRepository<Cinema, Long> {
+  List<Cinema> findByCityId(String cityId);
+}
+```
+
+
+### 2.2 模块划分（后端目录结构）
+
+
+```
+  ├─logs                                     # tomcat access log
+  ├─src
+  │  ├─main
+  │  │  ├─java
+  │  │  │  └─com
+  │  │  │      └─c09
+  │  │  │          └─GoMovie
+  │  │  │              ├─config              # 配置类
+  │  │  │              ├─movie
+  │  │  │              │  ├─controller       # 控制器
+  │  │  │              │  ├─entities         # 实体层
+  │  │  │              │  │  └─repositories  # DAO 层
+  │  │  │              │  └─service          # 服务层
+  │  │  │              ├─helper
+  │  │  │              └─user
+  │  │  │                  ├─controller      # 控制器
+  │  │  │                  ├─entities        # 实体层
+  │  │  │                  │  └─repositories # DAO 层
+  │  │  │                  └─service         # 服务层
+  │  │  └─resources                          # 资源定义文件
+  │  │      └─config
+  │  └─test                                  # 单元测试类
+  │      └─java
+  │          └─com
+  │              └─c09
+  │                  └─GoMovie
+  ├─pom.xml                                  # 包依赖
+  |
+  |...
+```
+### 2.3 架构设计
+整个后端采用spring mvc 框架，其各层关系表示如下：
+![mvc][1]
+#### 2.3.1 控制器
+
+Controller层负责具体的业务模块流程的控制，在此层里面要调用Serice层的接口来控制业务流程，控制的配置也同样是在Spring的配置文件里面进行，针对具体的业务流程，会有不同的控制器，我们具体的设计过程中可以将流程进行抽象归纳，设计出可以重复利用的子单元流程模块，这样不仅使程序结构变得清晰，也大大减少了代码量。
+
+```Java
+com.c09.GoMovie.***/
+  CinemaController.java       # 提供影院信息接口
+  MovieController.java        # 提供电影信息接口
+  OrderController.java        # 提供订单信息接口
+  ProductController.java      # 提供票务信息接口
+  UserController.java         # 提供用户服务接口，包括注册登录等
+  SessionController.java      # 提供回话接口
+```
+
+
+#### 2.3.2实体层
+
+Entity层是数据库在项目中的类实体对象，使用 Hibernate 跟数据库的物理数据模型建立对应关系
+
+```
+com.c09.GoMovie.***.entities/
+  Cinema.java
+  CinemaComment.java
+  Hall.java
+  Seat.java
+  Movie.java
+  MovieComment.java
+  Order.java
+  Screening.java
+  Ticket.java
+  User.java
+```
+
+#### 2.3.3 DAO 层
+
+DAO层主要是做数据持久层的工作，负责与数据库进行联络的一些任务都封装在此，DAO层的设计首先是设计DAO的接口，然后在Spring的配置文件中定义此接口的实现类，然后就可在模块中调用此接口来进行数据业务的处理，而不用关心此接口的具体实现类是哪个类，显得结构非常清晰，DAO层的数据源配置，以及有关数据库连接的参数都在Spring的配置文件中进行配置。
+
+```
+com.c09.GoMovie.***.repositories/
+  CinemaRepositoriy.java
+  CinemaCommentRepository.java
+  HallRepository.java
+  SeatRepository.java
+  MovieRepository.java
+  MovieCommentRepository.java
+  OrderRepository.java
+  ScreeningRepository.java
+  TicketRepository.java
+  UserRepository.java
+```
+
+
+#### 2.3.4 服务层
+
+Service层主要负责业务模块的逻辑应用设计。同样是首先设计接口，再设计其实现的类，接着再Spring的配置文件中配置其实现的关联。这样我们就可以在应用中调用Service接口来进行业务处理。Service层的业务实现，具体要调用到已定义的DAO层的接口，封装Service层的业务逻辑有利于通用的业务逻辑的独立性和重复利用性，程序显得非常简洁。
+```
+com.c09.GoMovie.***.services/
+  CinemaService.java
+  MovieService.java
+  OrderService.java
+  ProductService.java
+  UserService.java
+  SessionService.java
+```
+
+
+  
+### 2.4 软件设计技术
+####Object-Oriented Programming
+
+我们项目后端采用的主要语言是java，所以这个项目主要是面向对象编程，而很少用结构化编程。但是，因为我们的项目各个模块被清晰明确划分，所以能够充分利用面向对象编程的优势。，
+代码位置：/src/main/java/com/09/GoMovie
+
+
+#### 2.4.1 MVC Pattern
+
+在我们的项目中，mvc（model-view-controller）是我们最重要的设计模式。每个部分都有相应的代码实现。模型层
+主要包括实体和服务类。视图层主要由前端实现，包括node.js。控制器层及其关联的控制器类被放置在控制器文件夹中。
+
+代码位置: /src/main/java/com/09/GoMovie/***/services
+/src/main/java/com/09/GoMovie/***/entit ies
+/src/main/java/com/09/GoMovie/***/controller
+
+
+#### 2.4.2 Data Access Object Pattern
+
+
+数据访问对象必须实现特定的持久性策略（例如，JDBC或基于Hibernate的持久性逻辑），从而提取DAO层。 DAO界面：定义具体的操作方法。 DAO类：完成数据访问到真实主题的业务逻辑处理，最终用户想要获取数据信息。
+
+代码位置: /src/main/java/com/09/GoMovie/***/repository
+
+  [1]: http://ojtxs7ajx.bkt.clouddn.com/SSH-ENTITY_DAO_SERVICE_CONTROLLER.png
