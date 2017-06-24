@@ -90,7 +90,7 @@
 
 7. 查看”我的订单“界面
 
-   ![my order](./user-img/my order.jpg)
+   ![my_order](./user-img/my_order.jpg)
 
 8. ”转让板“界面
 
