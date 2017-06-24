@@ -66,39 +66,39 @@
 
 1. 主界面
 
-   ![main_page](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\main_page.png)
+   ![main_page](user-img\main_page.png)
 
 2. 选择某部电影之后的电影简介以及电影评分界面
 
-   ![movie_description](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\movie_description.jpg)
+   ![movie_description](user-img\movie_description.jpg)
 
 3. 选择场次界面
 
-   ![time_and_cinema](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\time_and_cinema.jpg)
+   ![time_and_cinema](user-img\time_and_cinema.jpg)
 
 4. 选择座位界面
 
-   ![seat](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\seat.jpg)
+   ![seat](user-img\seat.jpg)
 
 5. 支付订单界面
 
-   ![pay](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\pay.jpg)
+   ![pay](user-img\pay.jpg)
 
 6. 支付成功界面
 
-   ![pay_success](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\pay_success.jpg)
+   ![pay_success](user-img\pay_success.jpg)
 
 7. 查看”我的订单“界面
 
-   ![my order](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\my order.jpg)
+   ![my order](user-img\my order.jpg)
 
 8. ”转让板“界面
 
-   ![transfer_board](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\transfer_board.jpg)
+   ![transfer_board](user-img\transfer_board.jpg)
 
 9. 新建”转让影票“界面
 
-   ![new_trans](E:\University3\second_semester\王青期末项目\GoMovieDashboard\user-img\new_trans.jpg)
+   ![new_trans](user-img\new_trans.jpg)
 
 ---
 
